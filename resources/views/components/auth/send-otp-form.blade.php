@@ -8,7 +8,7 @@
                     <label>Your email address</label>
                     <input id="email" placeholder="User Email" class="form-control" type="email"/>
                     <br/>
-                    <button onclick="VerifyEmail()"  class="btn w-100 float-end bg-gradient-primary">Next</button>
+                    <button onclick="SentOTP()"  class="btn w-100 float-end bg-gradient-primary">Next</button>
                 </div>
             </div>
         </div>
@@ -16,26 +16,19 @@
 </div>
 
 <script>
-   async function VerifyEmail() {
-        let email = document.getElementById('email').value;
-        if(email.length === 0){
-           errorToast('Please enter your email address')
-        }
-        else{
-            showLoader();
-            let res = await axios.post('/send-otp', {email: email});
-            hideLoader();
-            if(res.status===200 && res.data['status']==='success'){
-                successToast(res.data['message'])
-                sessionStorage.setItem('email', email);
-                setTimeout(function (){
-                    window.location.href = '/verifyOtp';
-                }, 1000)
-            }
-            else{
-                errorToast(res.data['message'])
-            }
-        }
+    async function SentOTP() {
 
+    let postBody={"email":document.getElementById('email').value,}
+
+    let res=await axios.post("/send-otp",postBody);
+
+    if(res.status===200 && res.data['status']==='success'){
+        sessionStorage.setItem("email",document.getElementById('email').value);
+        window.location.href="/verifyOtp";
     }
+    else{
+        errorToast(res.data['message']);
+    }
+    }
+     
 </script>
